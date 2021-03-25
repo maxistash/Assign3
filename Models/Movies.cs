@@ -6,14 +6,16 @@ using System.Threading.Tasks;
 
 namespace Assign3.Models
 {
-    public class MovieForm
+    public class Movie
     {
+        [Required]
+        public int MovieID { get; set; }
         [Required]
         public string Category { get; set; }
         [Required]
         public string Title { get; set; }
         [Required]
-        [Range(1900,2021, ErrorMessage ="Must enter a valid Year")]
+        [Range(1900, 2021, ErrorMessage = "Must enter a valid Year")]
         public int Year { get; set; }
         [Required]
         public string Director { get; set; }

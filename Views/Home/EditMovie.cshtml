@@ -1,0 +1,61 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Edit";
+}
+
+@model Assign3.Models.ViewModels.EditMovieViewModel
+
+<h1>@ViewData["Title"]</h1>
+
+<form class="form-group" asp-action="ModifyMovie" method="post">
+    <div>
+        <label asp-for="@Model.Movie.Category">Category: </label>
+        <input asp-for="@Model.Movie.Category" />
+    </div>
+    <div>
+        <label asp-for="@Model.Movie.Title">Title: </label>
+        <input asp-for="@Model.Movie.Title" />
+    </div>
+    <div>
+        <label asp-for="@Model.Movie.Year">Year: </label>
+        <input asp-for="@Model.Movie.Year" />
+    </div>
+    <div>
+        <label asp-for="@Model.Movie.Director">Director: </label>
+        <input asp-for="@Model.Movie.Director" />
+    </div>
+    <div>
+        <label asp-for="@Model.Movie.Rating">Rating: </label>
+        <select asp-for="@Model.Movie.Rating">
+            <option value="G">G</option>
+            <option value="PG">PG</option>
+            <option value="PG-13">PG-13</option>
+            <option value="R">R</option>
+        </select>
+    </div>
+    <div>
+        <label asp-for="@Model.Movie.Edited">Edited: </label>
+        <input asp-for="@Model.Movie.Edited" />
+    </div>
+    <div>
+        <label asp-for="@Model.Movie.Lent">Lent: </label>
+        <input asp-for="@Model.Movie.Lent" />
+    </div>
+    <div>
+        <label asp-for="@Model.Movie.Notes">Notes: </label>
+        <input asp-for="@Model.Movie.Notes" />
+    </div>
+    <div hidden>
+        <label asp-for="@Model.Movie.MovieID">Notes: </label>
+        <input asp-for="@Model.Movie.MovieID" />
+    </div>
+    <button type="submit" class="alert-primary">Finish Edit</button>
+    <div asp-validation-summary="All"></div>
+</form>
+<form asp-action="DeleteMovie" method="post">
+    <input id="id" name="movieid" value="@Model.Movie.MovieID" hidden />
+    <button type="submit" class="alert-danger">Remove</button>
+</form>
+<p><a asp-action="MovieList">Return</a></p>

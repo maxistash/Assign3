@@ -1,4 +1,5 @@
 ﻿using Assign3.Models;
+using Assign3.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -13,12 +14,20 @@ namespace Assign3.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        private iMovieRepository _repository;
+
+        public HomeController(ILogger<HomeController> logger, iMovieRepository repository)
         {
             _logger = logger;
+            _repository = repository;
         }
 
         public IActionResult Index()
+        {
+            return View();
+        }
+
+        public IActionResult Privacy()
         {
             return View();
         }
@@ -28,29 +37,86 @@ namespace Assign3.Controllers
             return View();
         }
 
+        public IActionResult MovieList()
+        {
+            return View(new MovieListViewModel
+            {
+                Movies = _repository.Movies
+            }
+            );
+        }
+
+        [HttpPost]
+        public IActionResult MovieForm(Movie movie)
+        {
+            Debug.WriteLine(movie.Category);
+            if (ModelState.IsValid)
+            {
+                _repository.AddMovie(movie);
+            }
+            return View();
+        }
+
         [HttpGet]
         public IActionResult MovieForm()
         {
             return View();
         }
+
         [HttpPost]
-        public IActionResult MovieForm(MovieForm movieForm)
+        public IActionResult EditMovie(Movie movie)
         {
-            if (movieForm.Title == "Independence Day")
+            Debug.Print("yo");
+            int movieid = movie.MovieID;
+            if (movieid == null)
             {
-                return View("Sorry");
+                return View("Index");
             }
-            else
+
+            _repository.UpdateMovie(movie);
+
+            return View("MovieList", new MovieListViewModel
             {
-                Storage.addForm(movieForm);
-                return View("MovieList", Storage.mForms);
+                Movies = _repository.Movies
             }
-            
+            );
         }
 
-        public IActionResult Privacy()
+        [HttpGet]
+        public IActionResult EditMovie(string movieid)
         {
-            return View();
+            if (movieid == null)
+            {
+                return View("Error");
+            }
+            int theid = int.Parse(movieid);
+            Movie m = _repository.Movies
+                           .Where(m => m.MovieID == theid)
+                           .FirstOrDefault<Movie>();
+
+            return View(new EditMovieViewModel { Movie = m });
+        }
+
+        [HttpPost]
+        public IActionResult DeleteMovie(string movieid)
+        {
+            if (movieid == null)
+            {
+                return View("Error");
+            }
+
+            int theid = int.Parse(movieid);
+            Movie movie = _repository.Movies
+                           .Where(m => m.MovieID == theid)
+                           .FirstOrDefault<Movie>();
+
+            _repository.DeleteMovie(movie);
+
+            return View("MovieList", new MovieListViewModel
+            {
+                Movies = _repository.Movies
+            }
+            );
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

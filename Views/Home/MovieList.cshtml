@@ -5,29 +5,35 @@
     ViewBag.Title = "Movie List";
 }
 
-@model IEnumerable<Assign3.Models.MovieForm>
-<div>
-    <h1>Your Added Movies</h1>
-</div>
+@model MovieListViewModel
 
-<table>
-    <thead>
-        <tr><th>Category</th><th>Title</th><th>Year</th><th>Director</th><th>Rating</th><th>Edited</th><th>Lent To</th><th>Notes</th></tr>
-    </thead>
-    <tbody>
-        @foreach (Assign3.Models.MovieForm x in Model)
-        {
-        <tr>
-            <td>@x.Category</td>
-            <td>@x.Title</td>
-            <td>@x.Year</td>
-            <td>@x.Director</td>
-            <td>@x.Rating</td>
-            <td>@x.Edited</td>
-            <td>@x.Lent</td>
-            <td>@x.Notes</td>
+    <div>
+        <h1>Your Added Movies</h1>
+    </div>
 
-        </tr>
-        }
-    </tbody>
-</table>
+    <table>
+        <thead>
+            <tr><th>Category</th><th>Title</th><th>Year</th><th>Director</th><th>Rating</th><th>Edited</th><th>Lent To</th><th>Notes</th></tr>
+        </thead>
+        <tbody>
+            @foreach (Assign3.Models.Movie x in Model.Movies)
+            {
+                <tr>
+                    <td>@x.Category</td>
+                    <td>@x.Title</td>
+                    <td>@x.Year</td>
+                    <td>@x.Director</td>
+                    <td>@x.Rating</td>
+                    <td>@x.Edited</td>
+                    <td>@x.Lent</td>
+                    <td>@x.Notes</td>
+                    <td>
+                        <form asp-action="EditMovie" method="get">
+                            <input id="id" name="movieid" value="@x.MovieID" hidden />
+                            <button type="submit" class="alert-danger">Edit/Remove</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
